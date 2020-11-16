@@ -1,0 +1,16 @@
+{
+  "name": "football_prospects",
+  "version": "1.0.0",
+  "description": "a webserver for managing football prospects database",
+  "main": "server.js",
+  "dependencies": {
+    "mysql": "^2.18.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "Nir Magor",
+  "license": "ISC"
+}
