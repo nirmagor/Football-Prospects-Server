@@ -13,14 +13,19 @@ The server components:
 #   Observer
       The observer module supports Read operations. An observer of the website would be able to:
           
-          1. Inspect the prospects as a table
-          2. Inspect each prospects profile
+          1. Access the prospects as a table
+          2. Access each prospects global profile
+          
+# External Scout
+    The external scout module supports CRUD operation. A scout using the website would be able to:
+        1. Access and Modify prospects global profile.
 
 #   Team
       The team module supports CRUD operations. A team using the website would be able to:
       
-          1. Inspect and modify the prospects data
+          1. Access and modify the prospects data
           2. Create a board of prospects which it likes.
+          3. Access and Modify prospects private profile (with data relevant to the teams scouting)
           
 #   Profile
       An abstraction of a prospect profile. Every prospect will have a profile. 
