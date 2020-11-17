@@ -4,51 +4,79 @@ const prospects_manager = require(path.join(__dirname , `/prospects_manager`));
 const board_manager = require(path.join(__dirname , `/board_manager`));
 const logger = require(path.join(__dirname , `/logger`));
 
-class DBManager{
+class DBManager {
 
     static isCreated = false;
     static singleton;
 
 
-    constructor(){
-        this.profiles = new profiles_manager(); 
-        this.proespects = new prospects_manager(); 
-        this.boards = new board_manager(); 
+    constructor() {
+        this.profiles = new profiles_manager();
+        this.proespects = new prospects_manager();
+        this.boards = new board_manager();
         this.logger = new logger();
-        DBManager.isCreated = true; 
+        DBManager.isCreated = true;
         DBManager.singleton = this;
     }
 
-    setDb(identifier){
+    async init() {
+        try {
+            let prospectsInit = await this.proespects.init();
+            return new Promise((res, rej) => {
+                res(true);
+            });
+
+        } catch (err) {
+            throw err;
+
+        }
+    }
+
+
+    async end() {
+        try {
+            await this.proespects.end();
+            return new Promise((res, rej) => {
+
+                res(true);
+            });
+        } catch (err) {
+            throw err;
+        }
+    }
+
+    setDb(identifier) {
         let db = this.profiles;
-        if(identifier === `prospects`){
+        if (identifier === `prospects`) {
             db = this.proespects;
-        }else if(identifier === `board`){
+        } else if (identifier === `board`) {
             db = this.boards;
         }
         return db;
     }
 
 
-    create(identifier, callback){
+    create(identifier, data,errorHandler) {
         let db = this.setDb(identifier);
-        db.create(callback);
-    }
-    
-    read(identifier, filter, callback){
-        let db = this.setDb(identifier);
-        db.read(filter, callback);
+        db.create(data, errorHandler);
     }
 
-    update(identifier, filter, data , callback){
+    read(identifier, filter, errorHandler) {
         let db = this.setDb(identifier);
-        db.update(filter, data, callback);
+        db.read(filter, errorHandler);
     }
 
-    delete(identifier, filter, callback){
+    update(identifier, filter, data, errorHandler) {
         let db = this.setDb(identifier);
-        db.delete(filter, callback);
+        db.update(filter, data, errorHandler);
     }
+
+    delete(identifier, filter, errorHandler) {
+        let db = this.setDb(identifier);
+        db.delete(filter, errorHandler);
+    }
+
+
 
 }
 
