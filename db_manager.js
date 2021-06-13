@@ -1,6 +1,6 @@
 const path = require(`path`);
 const profiles_manager = require(path.join(__dirname ,`/profiles_manager`));
-const prospects_manager = require(path.join(__dirname , `/prospects_manager`));
+coProspectsManager = require(path.join(__dirname , `/ProspectsManager`));
 const board_manager = require(path.join(__dirname , `/board_manager`));
 const logger = require(path.join(__dirname , `/logger`));
 
@@ -12,7 +12,7 @@ class DBManager {
 
     constructor() {
         this.profiles = new profiles_manager();
-        this.proespects = new prospects_manager();
+        this.proespects = ProspectsManager();
         this.boards = new board_manager();
         this.logger = new logger();
         DBManager.isCreated = true;
@@ -33,16 +33,10 @@ class DBManager {
     }
 
 
-    async end() {
-        try {
-            await this.proespects.end();
-            return new Promise((res, rej) => {
-
-                res(true);
-            });
-        } catch (err) {
-            throw err;
-        }
+    end() {
+        this.proespects.end();
+        this.profiles.end();
+        this.boards.end();
     }
 
     setDb(identifier) {
@@ -56,24 +50,46 @@ class DBManager {
     }
 
 
-    create(identifier, data,errorHandler) {
+    async create(identifier, data) {
+       
         let db = this.setDb(identifier);
-        db.create(data, errorHandler);
+        try{
+            return await db.create(data);
+        }catch(err){
+            throw err;
+        }         
     }
 
-    read(identifier, filter, errorHandler) {
+    async read(identifier, filter) {
         let db = this.setDb(identifier);
-        db.read(filter, errorHandler);
+        try{
+            return await db.read(filter);;
+        }catch(err){
+            throw err;
+        } 
     }
 
-    update(identifier, filter, data, errorHandler) {
+    async update(identifier, filter, data) {
         let db = this.setDb(identifier);
-        db.update(filter, data, errorHandler);
+        try{ 
+            return await db.update(filter, data);
+        }catch(err){
+            throw err;
+        }
     }
 
-    delete(identifier, filter, errorHandler) {
+    async delete(identifier, filter) {
         let db = this.setDb(identifier);
-        db.delete(filter, errorHandler);
+        try{
+            return await db.delete(filter);
+        }catch(err){
+            throw err;
+        }
+        
+    }
+    
+    setProspectManagerBodyParametersMapping(mapping){
+        this.proespects.setBodyParamertersMapping(mapping);
     }
 
 
@@ -82,7 +98,6 @@ class DBManager {
 
 function getDBManger(){
     if(DBManager.isCreated){
-        console.log(`singleton`);
         return DBManager.singleton;   
     }
     return new DBManager();
